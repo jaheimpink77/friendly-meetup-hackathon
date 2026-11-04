@@ -18,7 +18,8 @@ def not_contains(result: dict, value: str) -> bool:
 
 
 def tool_called(result: dict, value: str) -> bool | None:
-    if result["tool_calls"][0]["name"] == value:
+    # Check every call (not just the first), and treat missing/empty tool_calls as "not called".
+    if any(call.get("name") == value for call in result.get("tool_calls") or []):
         return True
     return None
 
