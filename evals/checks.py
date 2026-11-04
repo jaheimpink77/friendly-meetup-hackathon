@@ -18,9 +18,14 @@ def not_contains(result: dict, value: str) -> bool:
 
 
 def tool_called(result: dict, value: str) -> bool | None:
-    # TODO (Level 2): return True if the agent called the tool named `value`.
+    if result["tool_calls"][0]["name"] == value:
+        return True
     return None
 
+
+def max_words(result: dict, value: int | str | None = 100) -> bool:
+    limit = int(value) if value else 100
+    return len(result["answer"].split()) <= limit
 
 # TODO (Level 2): add your own checks here, then register them below. Ideas:
 #   tool_called_with  the right tool AND the right arguments (e.g. the correct order ID)
@@ -34,4 +39,5 @@ CHECKS = {
     "contains": contains,
     "not_contains": not_contains,
     "tool_called": tool_called,
+    "max_words": max_words,
 }
