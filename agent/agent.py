@@ -8,7 +8,7 @@ import sys
 import time
 from pathlib import Path
 
-from agent.llm import client_for
+from agent.llm import client_for, sampling_kwargs
 from agent.tools import TOOL_SCHEMAS, TOOLS
 
 SYSTEM_PROMPT_FILE = Path(__file__).parent / "system_prompt.md"
@@ -27,7 +27,7 @@ def run_agent(question: str, max_steps: int = 5) -> dict:
 
     for _ in range(max_steps):
         response = client.chat.completions.create(
-            model=model, messages=messages, tools=TOOL_SCHEMAS, temperature=0
+            model=model, messages=messages, tools=TOOL_SCHEMAS, **sampling_kwargs("AGENT")
         )
         tokens += response.usage.total_tokens if response.usage else 0
         message = response.choices[0].message
